@@ -147,8 +147,40 @@ async def webhook(req: Request):
         mtype = message.get("type")
 
         # ข้อความ
-        if mtype == "text":
-            reply(reply_token, "🧾 BILIX พร้อมบันทึกบิลแล้วครับ\nส่งรูปบิลเข้ามาได้เลย")
+        import re
+
+def parse_text_bill(text):
+    pattern = r"(.+?)\s+(\d+)"
+    match = re.match(pattern, text.strip())
+    if match:
+        category = match.group(1)
+        amount = int(match.group(2))
+        return category, amount
+    return None, None
+
+
+# ใน handler เดิมของคุณ
+if event.message.type == "text":
+    user_text = event.message.text.strip()
+
+    category, amount = parse_text_bill(user_text)
+
+    if amount:
+        # ตรงนี้ให้เรียกฟังก์ชันบันทึกลง Google Sheet ตัวเดิมที่คุณใช้กับบิล
+        save_to_sheet(group_id, category, amount)
+
+        total = get_group_total(group_id)
+
+        reply_text = f"""🧾 ใบสรุปค่าใช้จ่าย
+หมวด: {category}
+ยอด: {amount:,} บาท
+
+รวมสะสม: {total:,} บาท
+"""
+        reply(reply_text)
+
+    else:
+        reply("🧾 BILIX พร้อมบันทึกบิลแล้วครับ\nส่งรูปบิล หรือพิมพ์ยอดเช่น: อาหาร 320")
             continue
 
         # รูปภาพ (บิล)
