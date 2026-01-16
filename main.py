@@ -22,7 +22,7 @@ vision_client = vision.ImageAnnotatorClient(credentials=credentials)
 # Google Sheet API
 sheets_service = build("sheets", "v4", credentials=credentials)
 
-SPREADSHEET_ID = credentials_info["project_id"]
+SPREADSHEET_ID = credentials_info["SPREADSHEET_ID"]
 
 # ---------------- HELPERS ----------------
 
