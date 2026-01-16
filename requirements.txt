@@ -1,3 +1,9 @@
 fastapi
 uvicorn
+python-multipart
 requests
+google-cloud-vision
+google-api-python-client
+google-auth
+google-auth-oauthlib
+pillow
